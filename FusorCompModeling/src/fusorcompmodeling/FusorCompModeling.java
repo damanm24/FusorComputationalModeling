@@ -23,19 +23,15 @@ public class FusorCompModeling {
      * @throws java.io.FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException {
-        long[] times = new long[4];
-        int[] logNums = new int[]{100, 1000, 5000, 10000};
+        long[] times = new long[6];
+        int[] logNums = new int[]{100, 1000, 5000, 10000, 20000, 50000};
         System.out.println("Loading file...");
         XMLParser p = new XMLParser("testXML.xml");
         List<GridComponent> parts = p.parseObjects();
         System.out.println("File loaded and initialized");
         Random rand = new Random();
         //-1 IS AN ANODE +, 1 IS A CATHODE -, 0 WILL BE NEUTRAL
-<<<<<<< HEAD
         for (int i = 0; i < logNums.length; i++) {
-=======
-        for(int i = 0; i < 4; i++){
->>>>>>> parent of 111deca... Replaced Array List with Array
             long startTime = System.currentTimeMillis();
             ArrayList<Point> points = distributePoints(parts, logNums[i]);
             //int changes = 80;
@@ -51,15 +47,9 @@ public class FusorCompModeling {
         //System.out.println("Times run: " + timesRun);
         BufferedWriter logFile = null;
         try {
-<<<<<<< HEAD
             logFile = new BufferedWriter(new FileWriter("C:\\Users\\Daman\\Documents\\NetBeansProjects\\FusorComputationalModeling\\FusorCompModeling\\FusorLog.csv"));
             for (int i = 0; i < logNums.length; i++) {
                 logFile.write("" + logNums[i] + "," + times[i]);
-=======
-            logFile = new BufferedWriter(new FileWriter("C:\\Users\\sfreisem-kirov\\Documents\\GitHub\\FusorComputationalModeling\\FusorCompModeling\\FusorLog.csv"));
-            for(int i = 0; i < 4; i++){
-                logFile.write("" + times[i]);
->>>>>>> parent of 111deca... Replaced Array List with Array
                 logFile.newLine();
                 logFile.flush();
             }
@@ -80,14 +70,9 @@ public class FusorCompModeling {
         }
         return totalPoints;
     }
-<<<<<<< HEAD
 
-    public static Point getRandomPoint(List<GridComponent> parts) {
-        int charge = 1;
-=======
     
     public static Point getRandomPoint(List<GridComponent> parts, int charge) {
->>>>>>> parent of 111deca... Replaced Array List with Array
         double area = totalSurfaceArea(parts, charge);
         Random generator = new Random();
         double rand = generator.nextDouble() * area;
@@ -163,17 +148,6 @@ public class FusorCompModeling {
         }
         return change;*/
         int changes = 0;
-<<<<<<< HEAD
-        for (int i = 0; i < points.length; i++) {
-            Point newPoint = getRandomPoint(parts);
-            double currentEP = electricPotential(points, points[i]);
-            double newEP = electricPotential(points, newPoint);
-            if (newEP > currentEP) {
-                changes++;
-                points[i] = newPoint;
-            } else if (newEP < currentEP) {
-                points[i].EP = currentEP;
-=======
         
         for (int i = 0; i < points.size(); i++) {
             Point newPoint = getRandomPoint(parts, points.get(i).charge);
@@ -182,7 +156,6 @@ public class FusorCompModeling {
             if (newEP > currentEP) {
                 changes++;
                 points.set(i, newPoint);
->>>>>>> parent of 111deca... Replaced Array List with Array
             }
         }
         return changes;
