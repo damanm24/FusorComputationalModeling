@@ -9,12 +9,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 
 /**
  *
@@ -22,8 +27,12 @@ import org.w3c.dom.NodeList;
  */
 public class XMLParser {
     String path;
+    ScriptEngine engine;
+    
     public XMLParser(String path) {
         this.path = path;
+        ScriptEngineManager mgr = new ScriptEngineManager();
+        this.engine = mgr.getEngineByName("JavaScript");
     }
     
     public List<GridComponent> parseObjects() throws FileNotFoundException {
@@ -86,13 +95,26 @@ public class XMLParser {
         }
     }
     public double parsePiDouble(Element element, String tag) {
-        String textContent = element.getElementsByTagName(tag).item(0).getTextContent();
+        String tC = element.getElementsByTagName(tag).item(0).getTextContent();
+        /*tC = tC.toLowerCase(); // Squash all UC letters
+        tC = tC.replaceAll("pi", "3.141592653589793");
+        tC = tC.replaceAll("tau", "6.283185307179586");
+        Object parsed;
+        try {
+            parsed = engine.eval(tC);
+        } catch (ScriptException ex) {
+            System.out.println("Could not parse expression \"" + tC + "\" from " + 
+                    tag + " property of " + element.getElementsByTagName("type").item(0).getTextContent());
+        }
+        return(Double.parseDouble(engine.eval(tC).toString()));*/
         
-        if (textContent.contains("pi")) {
-            String[] containsPoint = textContent.split("pi");
+        // Replace pi, Pi, PI, and π with 3.141592653589793
+        
+        if (tC.contains("pi")) {
+            String[] containsPoint = tC.split("pi");
             return Double.parseDouble(containsPoint[1])*Math.PI;
         } else {
-            return Double.parseDouble(textContent);
+            return Double.parseDouble(tC);
         }
     }
     public int parseCharge(Element element) {
